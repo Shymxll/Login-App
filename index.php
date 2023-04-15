@@ -4,15 +4,35 @@
  if(isset($_POST["index"])){
   $name=$_POST["name"];
   $password=$_POST["password"];
+  if($name == "" || $password == ""){
+    echo '<div class="alert alert-warning" role="alert">
+      Please fill in the fields
+    </div>';
+    header("Refresh:2; url=index.php");
+    
+  }
   $findQuery = "SELECT * FROM user WHERE name = '$name' AND password = '$password' ";
   $result = mysqli_query($connection,$findQuery);
   
   if(mysqli_num_rows($result)===1){
     $row = mysqli_fetch_assoc($result);
+    
     if($row['name'] === $name && $row['password'] === $password){
+
+      
+
       echo '<div class="alert alert-success" role="alert">
        Success
-      </div>';
+      </div>
+      ';
+       
+      #get id parameter
+      
+      $userId =base64_encode($row['id']);
+      #create path to node.php but use id hash parameter
+      $path = "note.php?id=".$userId;
+      #redirect to node.php
+      header("Location: $path");
     }
     
   }else{

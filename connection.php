@@ -7,6 +7,8 @@ $vt = "tasks";
 $connection = new mysqli($host,$username,$password,$vt);
 
 if($connection){
-    echo "Connected";
+    #log to console
+    echo "Connection is successful";
 }
 ?>
+

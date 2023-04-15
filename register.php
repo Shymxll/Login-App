@@ -30,11 +30,6 @@
   
   <div class="wrapper fadeInDown">
   <div id="formContent">
-    <!-- Tabs Titles -->
-
-    <!-- Icon -->
-  
-
     <!-- Login Form -->
     <div class="container col-4">
         <div class="card">
