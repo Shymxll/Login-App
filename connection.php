@@ -7,8 +7,16 @@ $vt = "tasks";
 $connection = new mysqli($host,$username,$password,$vt);
 
 if($connection){
-    #log to console
-    echo "Connection is successful";
+    echo '<div class="alert alert-success" role="alert">
+       Connection Success
+      </div>
+      ';}
+else{
+    echo '<div class="alert alert-danger" role="alert">
+       Connection failed
+      </div>
+      ';
+      
 }
 ?>
 

@@ -1,7 +1,8 @@
 <?php
  @include("connection.php");
-
+ @session_start();
  if(isset($_POST["index"])){
+
   $name=$_POST["name"];
   $password=$_POST["password"];
   if($name == "" || $password == ""){
@@ -19,7 +20,9 @@
     
     if($row['name'] === $name && $row['password'] === $password){
 
-      
+      $_SESSION['username'] = $row['name'];
+      $_SESSION['id'] = base64_encode($row['id']);
+      echo $_SESSION['username'];
 
       echo '<div class="alert alert-success" role="alert">
        Success
@@ -28,9 +31,7 @@
        
       #get id parameter
       
-      $userId =base64_encode($row['id']);
-      #create path to node.php but use id hash parameter
-      $path = "note.php?id=".$userId;
+      $path = "note.php";
       #redirect to node.php
       header("Location: $path");
     }
@@ -68,7 +69,7 @@
     <div class="container col-4">
         <div class="card">
           <div class="card-body">
-          <form method="POST" action="index.php">
+          <form method="POST" action="">
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input type="name" class="form-control" name="name" id="name" aria-describedby="nameHelp">

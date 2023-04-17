@@ -1,11 +1,9 @@
 <?php
 
+session_start();
 
 //get id parameter
-$userId = $_GET['id'];
-// decode id parameter
-$userId = base64_decode($userId);
-echo $userId;
+$userId = base64_decode($_SESSION['id']);
 
 if(isset($_POST["noteAdd"])){
   
@@ -20,7 +18,11 @@ if(isset($_POST["noteAdd"])){
       $result = mysqli_query($connection,$query);
       //fetch result
       if ($result) {
-          echo "Success";
+        echo '<div class="alert alert-success" role="alert">
+        Success
+       </div>
+       ';
+       
       } else {
           
       }
@@ -44,7 +46,7 @@ if(isset($_POST["noteAdd"])){
         <div class="mb-3">   
                         
             <div class="mb-3">
-              <form method = "POST" action="index.php">
+              <form method = "POST" action="">
             <label for="exampleFormControlTextarea1" name="note" class="form-label">Example textarea</label>
             <input type="text" class="form-control" name="noteText" id="exampleFormControlTextarea1" rows="3"></i>
            </div>
