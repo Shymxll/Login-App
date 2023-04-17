@@ -2,18 +2,20 @@
 
 session_start();
 include_once("connection.php");
-//get id parameter
+//get id parameter and name parameter
 $userId = base64_decode($_SESSION['id']);
+$name = $_SESSION['username'];
 
 if(isset($_POST["noteAdd"])){
   
   $noteText = $_POST["noteText"];
-  
+  $date = date("Y-m-d H:i:s");
 
   if($_POST["noteText"] != ""){
-     
+
+
       //insert query note table query, use user_id parameter, use noteText parameter
-      $query = "INSERT INTO notes (user_id,note) VALUES ('$userId','$noteText')";
+      $query = "INSERT INTO notes (user_id,name,note,created_date) VALUES ('$userId','$name','$noteText','$date')";
       //execute query
       
       $result = mysqli_query($connection,$query);
@@ -63,9 +65,9 @@ if(isset($_POST["noteAdd"])){
             <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Note</th>
+                    <th scope="col">Date</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -79,9 +81,9 @@ if(isset($_POST["noteAdd"])){
                       if($result){
                         while($row = mysqli_fetch_assoc($result)){
                           echo "<tr>";
-                          echo "<td>".$row['id']."</td>";
-                          echo "<td>".$row['user_id']."</td>";
+                          echo "<td>".$row['name']."</td>";
                           echo "<td>".$row['note']."</td>";
+                          echo "<td>".$row['created_date']."</td>";
                           echo "</tr>";
                         }
                       }
