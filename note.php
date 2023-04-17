@@ -71,7 +71,7 @@ if(isset($_POST["noteAdd"])){
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  
                     <?php
                      // get all notes from notes table
                       $query = "SELECT * FROM notes";
@@ -89,7 +89,7 @@ if(isset($_POST["noteAdd"])){
                       }
 
                    ?>
-                  </tr>
+                  
                 </tbody>
               </table>
 
