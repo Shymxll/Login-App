@@ -15,7 +15,7 @@ if(isset($_POST["noteAdd"])){
 
 
       //insert query note table query, use user_id parameter, use noteText parameter
-      $query = "INSERT INTO notes (user_id,name,note,created_date) VALUES ('$userId','$name','$noteText','$date')";
+      $query = "INSERT INTO notes (user_id,note,created_date) VALUES ('$userId','$noteText','$date')";
       //execute query
       
       $result = mysqli_query($connection,$query);
@@ -37,7 +37,6 @@ if(isset($_POST["noteAdd"])){
   
 
 
-  
 }
 ?>
 
@@ -46,7 +45,7 @@ if(isset($_POST["noteAdd"])){
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Note</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
   </head>
   <body>
@@ -73,17 +72,39 @@ if(isset($_POST["noteAdd"])){
                 <tbody>
                   
                     <?php
+                    
                      // get all notes from notes table
                       $query = "SELECT * FROM notes";
                       //execute query
                       $result = mysqli_query($connection,$query);
                       //fetch result
                       if($result){
+                          
                         while($row = mysqli_fetch_assoc($result)){
+                            //get user_id parameter and created_update parameter and note parameter from row parameter
+                            $userId = $row['user_id'];
+                            $createdDate = $row['created_date'];
+                            $note = $row['note'];  
+
+                           // get user rows what is related to notes table with user_id parameter 
+                            $userQuery = "SELECT * FROM user WHERE id = '$userId'";
+                             //execute query
+                             $userResult = mysqli_query($connection,$userQuery);
+                             //fetch result
+                              if($userResult){
+                                  
+                                while($userRow = mysqli_fetch_assoc($userResult)){
+                                    //get name parameter from row parameter
+                                    $name = $userRow['name'];
+                                }
+                              }
+                             
+                           
+
                           echo "<tr>";
-                          echo "<td>".$row['name']."</td>";
-                          echo "<td>".$row['note']."</td>";
-                          echo "<td>".$row['created_date']."</td>";
+                          echo "<td>".$name."</td>";
+                          echo "<td>".$note."</td>";
+                          echo "<td>".$createdDate."</td>";
                           echo "</tr>";
                         }
                       }
