@@ -94,7 +94,7 @@ if(isset($_POST["noteAdd"])){
                               //delete form and button for delete note
                               echo "<td><form method = 'POST' action=''>
                               <input type='hidden' name='id' value='".$id."'>
-                              <input type='hidden' name='userId' value='".$userId."'>
+                             
                               <button type='submit' name='deleteNote' class='btn btn-danger'>Delete</button>
                               </form></td>";
 
@@ -105,7 +105,13 @@ if(isset($_POST["noteAdd"])){
 
                         if(isset($_POST["deleteNote"])){
                           $id = $_POST["id"];
-                          $userId = $_POST["userId"];
+                          //get user id from note table query, use id parameter 
+                          $query = "SELECT user_id FROM notes WHERE id = '$id'";
+                          //execute query
+                          $result = mysqli_query($connection,$query);
+                          //fetch result
+                          $row = mysqli_fetch_assoc($result);
+                          $userId = $row['user_id'];  
                           if($userId == base64_decode($_SESSION['id'])){
                           
                           //delete query note table query, use id 
