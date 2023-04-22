@@ -92,13 +92,16 @@ if(isset($_POST["noteAdd"])){
                               echo "<td>".$note."</td>";
                               echo "<td>".$createdDate."</td>";
                               //delete form and button for delete note
-                              echo "<td><form method = 'POST' action=''>
-                              <input type='hidden' name='id' value='".$id."'>
-                             
-                              <button type='submit' name='deleteNote' class='btn btn-danger'>Delete</button>
-                              </form></td>";
+                              if($userId == base64_decode($_SESSION['id'])){
+                                echo "<td><form method = 'POST' action=''>
+                                <input type='hidden' name='id' value='".$id."'>
+                              
+                                <button type='submit' name='deleteNote' class='btn btn-danger btn-sm'>Delete</button>
+                                </form></td>";
+                               }
 
                               echo "</tr>";
+                              
                             
                           }
                         }
