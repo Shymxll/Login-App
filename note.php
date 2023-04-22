@@ -2,6 +2,7 @@
 
 session_start();
 include_once("connection.php");
+include_once("NoteFunction.php");
 //get id parameter and name parameter
 $userId = base64_decode($_SESSION['id']);
 $name = $_SESSION['username'];
@@ -54,7 +55,11 @@ if(isset($_POST["noteAdd"])){
             <div class="mb-3">
               <form method = "POST" action="note.php">
             <label for="exampleFormControlTextarea1" name="note" class="form-label">Example textarea</label>
-            <input type="text" class="form-control" name="noteText" id="exampleFormControlTextarea1" rows="3"></i>
+            <input type="text" id="noteText" class="form-control" name="noteText" id="exampleFormControlTextarea1" value="" rows="3" ></input>
+            <?php 
+              
+             
+            ?>
            </div>
             <button type="submit" name="noteAdd" class="btn btn-primary">Submit</button>
             
@@ -86,7 +91,7 @@ if(isset($_POST["noteAdd"])){
                             $userId = $row['user_id'];
                             $createdDate = $row['created_date'];
                             $name = $row['name']; 
-                            $note = $row['note'];
+                            $note = cleanNote($row['note']);
                               echo "<tr>";
                               echo "<td>".$name."</td>";
                               echo "<td>".$note."</td>";
