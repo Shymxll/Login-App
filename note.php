@@ -67,47 +67,74 @@ if(isset($_POST["noteAdd"])){
                     <th scope="col">Name</th>
                     <th scope="col">Note</th>
                     <th scope="col">Date</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   
                     <?php
                     
-                     // get all notes from notes table
-                      $query = "SELECT * FROM notes";
+                     // join user table and note table query, use user_id parameter and note parameter
+                      $query = "SELECT * FROM user JOIN notes ON notes.user_id =  user.id";
                       //execute query
                       $result = mysqli_query($connection,$query);
                       //fetch result
                       if($result){
                           
                         while($row = mysqli_fetch_assoc($result)){
-                            //get user_id parameter and created_update parameter and note parameter from row parameter
+                            $id = $row['id'];
                             $userId = $row['user_id'];
                             $createdDate = $row['created_date'];
-                            $note = $row['note'];  
+                            $name = $row['name']; 
+                            $note = $row['note'];
+                              echo "<tr>";
+                              echo "<td>".$name."</td>";
+                              echo "<td>".$note."</td>";
+                              echo "<td>".$createdDate."</td>";
+                              //delete form and button for delete note
+                              echo "<td><form method = 'POST' action=''>
+                              <input type='hidden' name='id' value='".$id."'>
+                              <input type='hidden' name='userId' value='".$userId."'>
+                              <button type='submit' name='deleteNote' class='btn btn-danger'>Delete</button>
+                              </form></td>";
 
-                           // get user rows what is related to notes table with user_id parameter 
-                            $userQuery = "SELECT * FROM user WHERE id = '$userId'";
-                             //execute query
-                             $userResult = mysqli_query($connection,$userQuery);
-                             //fetch result
-                              if($userResult){
-                                  
-                                while($userRow = mysqli_fetch_assoc($userResult)){
-                                    //get name parameter from row parameter
-                                    $name = $userRow['name'];
-                                }
-                              }
-                             
-                           
-
-                          echo "<tr>";
-                          echo "<td>".$name."</td>";
-                          echo "<td>".$note."</td>";
-                          echo "<td>".$createdDate."</td>";
-                          echo "</tr>";
+                              echo "</tr>";
+                            
+                          }
                         }
-                      }
+
+                        if(isset($_POST["deleteNote"])){
+                          $id = $_POST["id"];
+                          $userId = $_POST["userId"];
+                          if($userId == base64_decode($_SESSION['id'])){
+                          
+                          //delete query note table query, use id 
+                           $query = "DELETE FROM notes WHERE id = '$id'";
+                          //execute query
+                          $result = mysqli_query($connection,$query);
+                          
+                          //fetch result
+                          if($result){
+                            echo '<div class="alert alert-success" role="alert">
+                            Success
+                           </div>
+                           ';
+                          }else{
+                            echo '<div class="alert alert-success" role="alert">
+                            Unsuccess
+                            </div>
+                           '; 
+                          }
+                         }
+                         else{
+                          echo '<div class="alert alert-danger" role="alert">
+                          You can delete only your note
+                          </div>';
+                         }
+                         header("Refresh:1; url=note.php");
+                         
+                        }
+                      
 
                    ?>
                   
