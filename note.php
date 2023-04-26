@@ -7,37 +7,15 @@ include_once("NoteFunction.php");
 $userId = base64_decode($_SESSION['id']);
 $name = $_SESSION['username'];
 
-if(isset($_POST["noteAdd"])){
-  
-  $noteText = $_POST["noteText"];
-  $date = date("Y-m-d H:i:s");
+if(isset($_POST["noteAdd"])) {
 
-  if($_POST["noteText"] != ""){
+    $noteText = $_POST["noteText"];
+    $date = date("Y-m-d H:i:s");
 
+    if($_POST["noteText"] != "") {
+        createNote($userId, $noteText, $date, $connection);
 
-      //insert query note table query, use user_id parameter, use noteText parameter
-      $query = "INSERT INTO notes (user_id,note,created_date) VALUES ('$userId','$noteText','$date')";
-      //execute query
-      
-      $result = mysqli_query($connection,$query);
-      //fetch result
-      if ($result) {
-        echo '<div class="alert alert-success" role="alert">
-        Success
-       </div>
-       ';
-       
-      } else {
-        echo '<div class="alert alert-success" role="alert">
-        Unsuccess
-        </div>
-       '; 
-      }
-  }
-  
-  
-
-
+    }
 }
 ?>
 
@@ -87,7 +65,7 @@ if(isset($_POST["noteAdd"])){
                       if($result){
                           
                         while($row = mysqli_fetch_assoc($result)){
-                            $id = $row['id'];
+                            $rowId = $row['id'];
                             $userId = $row['user_id'];
                             $createdDate = $row['created_date'];
                             $name = $row['name']; 
@@ -99,9 +77,13 @@ if(isset($_POST["noteAdd"])){
                               //delete form and button for delete note
                               if($userId == base64_decode($_SESSION['id'])){
                                 echo "<td><form method = 'POST' action=''>
-                                <input type='hidden' name='id' value='".$id."'>
-                              
-                                <button type='submit' name='deleteNote' class='btn btn-danger btn-sm'>Delete</button>
+                                <input type='hidden' name='rowId' value='".$rowId."'>
+                                <button  type='button' class='btn btn-sm btn-primary' data-bs-toggle='modal' data-bs-target='#exampleModal'>
+                                Update
+                                </button>
+                                <button type='submit' name='deleteNote' class='btn btn-danger btn-sm'>
+                                Delete
+                                </button>
                                 </form></td>";
                                }
 
@@ -112,41 +94,8 @@ if(isset($_POST["noteAdd"])){
                         }
 
                         if(isset($_POST["deleteNote"])){
-                          $id = $_POST["id"];
-                          //get user id from note table query, use id parameter 
-                          $query = "SELECT user_id FROM notes WHERE id = '$id'";
-                          //execute query
-                          $result = mysqli_query($connection,$query);
-                          //fetch result
-                          $row = mysqli_fetch_assoc($result);
-                          $userId = $row['user_id'];  
-                          if($userId == base64_decode($_SESSION['id'])){
-                          
-                          //delete query note table query, use id 
-                           $query = "DELETE FROM notes WHERE id = '$id'";
-                          //execute query
-                          $result = mysqli_query($connection,$query);
-                          
-                          //fetch result
-                          if($result){
-                            echo '<div class="alert alert-success" role="alert">
-                            Success
-                           </div>
-                           ';
-                          }else{
-                            echo '<div class="alert alert-success" role="alert">
-                            Unsuccess
-                            </div>
-                           '; 
-                          }
-                         }
-                         else{
-                          echo '<div class="alert alert-danger" role="alert">
-                          You can delete only your note
-                          </div>';
-                         }
-                         header("Refresh:1; url=note.php");
-                         
+                          //get note id from note table query, use id parameter
+                          deleteNote($rowId,$connection);
                         }
                       
 
@@ -154,6 +103,32 @@ if(isset($_POST["noteAdd"])){
                   
                 </tbody>
               </table>
+              <!--Modal for Update Button-->
+              <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Update</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form method = "POST" action="note.php">
+                          <div class="mb-3">
+                            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                            <input type="text" id="noteText" class="form-control" name="noteUptText" id="exampleFormControlTextarea1" value="" rows="3" ></input>
+                           
+                           </div>
+                            <button type="submit" name="noteUpdateModal" class="btn btn-primary">Submit</button>
+                            <?php 
+                              if(isset($_POST["noteUpdateModal"]))
+                                  //get note id from note table query, use id parameter
+                                  updateNote($rowId,$_POST["noteUptText"],$connection);
+                            ?>
+                            </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
             </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>

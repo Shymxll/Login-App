@@ -4,7 +4,7 @@ $username = "root";
 $password = "";
 $vt = "tasks";
 
-$connection = new mysqli($host,$username,$password,$vt);
+ $connection = new mysqli($host,$username,$password,$vt);
 
 if($connection){
     echo '<div class="alert alert-success" role="alert">
@@ -18,5 +18,6 @@ else{
       ';
       
 }
+
 ?>
 
