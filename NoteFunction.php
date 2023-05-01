@@ -42,7 +42,6 @@ if (isset($_POST['deleteRowId'])) {
      ';
   }
 }
-
 //note add function
 if (isset($_POST['noteText'])) {
 
