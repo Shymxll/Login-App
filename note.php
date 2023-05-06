@@ -159,7 +159,7 @@ include("NoteFunction.php");
         //delete button click function
         $(document).on("click", "button[name='deleteButton']", function() {
             var id = $(this).closest('tr').attr('id').split(" ")[1];
-            $(this).closest('tr').remove();
+            
             $.ajax({
                 url: "NoteFunction.php",
                 type: "POST",
@@ -167,7 +167,8 @@ include("NoteFunction.php");
                     deleteRowId: id,
                 },
                 success: function(data) {
-                    //set alert message to alertDiv
+
+$(this).closest('tr').remove();                    //set alert message to alertDiv
                     $("#alertDiv").html(data).fadeIn().delay(500).fadeOut();
 
                 },
